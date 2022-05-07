@@ -10,6 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        //    update repository section -
         maven {
             url 'https://android-sdk.is.com/'
         }

@@ -1,18 +1,12 @@
 package com.example.iron_source;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
-
-import com.ironsource.mediationsdk.ISBannerSize;
+import com.google.android.material.snackbar.Snackbar;
 import com.ironsource.mediationsdk.IronSource;
-import com.ironsource.mediationsdk.IronSourceBannerLayout;
-import com.ironsource.mediationsdk.integration.IntegrationHelper;
 import com.ironsource.mediationsdk.logger.IronSourceError;
-import com.ironsource.mediationsdk.sdk.BannerListener;
 import com.ironsource.mediationsdk.sdk.InterstitialListener;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,8 +16,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        Init the SDK
 
         IronSource.init(this, "14b1e5771", IronSource.AD_UNIT.INTERSTITIAL);
+//        Set the Listener Interstitial
         IronSource.setInterstitialListener(new InterstitialListener() {
             /**
              * Invoked when Interstitial Ad is ready to be shown after load function was called.
@@ -71,17 +67,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        Load Interstitial Ad
         IronSource.loadInterstitial();
         Button interstitial = findViewById(R.id.interstitialAds);
         interstitial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IronSource.showInterstitial("DefaultInterstitial");
-
+                if (IronSource.isInterstitialReady()) {
+//                    Show Interstitial Ad
+                    IronSource.showInterstitial("DefaultInterstitial");
+                }
+                else{
+                    Snackbar.make(findViewById(R.id.interstitialAds), "Ad is not ready",
+                            Snackbar.LENGTH_SHORT)
+                            .show();
+                }
             }
         });
+
     }
 
+    //Application Lifecycle
     protected void onResume() {
         super.onResume();
         IronSource.onResume(this);
